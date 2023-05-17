@@ -5,7 +5,7 @@ from datetime import date
 from rofi import Rofi
 
 # path to where you want your TODOs to be inserted to
-inbox_file = "/home/daryl/Dropbox/Apps/deft/inbox.org"
+inbox_file = "~/org/TODO.org"
 r = Rofi()
 
 def todo_to_inbox():
