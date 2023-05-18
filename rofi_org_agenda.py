@@ -47,20 +47,26 @@ for child in root.children:
             # Insert the new item into the list at the correct position
             sch_list.insert(i_node, child.scheduled.start)
             child_linenums.insert(i_node, child.linenumber)
-            todos.insert(i_node, child.scheduled.start.strftime("%Y-%m-%d %a") + "   " + child.heading)
-        if child.scheduled.start == today:
-            todos_today.append(child.scheduled.start.strftime("%Y-%m-%d %a") + "   " + child.heading)
-            child_today_linenums.append(child.linenumber)
+            if child.scheduled.start <= today:
+                if child.scheduled.start == today:
+                    todos_today.append(child.scheduled.start.strftime("%Y-%m-%d %a") + " 🚀" + child.heading)
+                else:
+                    todos_today.append(child.scheduled.start.strftime("%Y-%m-%d %a") + " ⭕" + child.heading)
+                child_today_linenums.append(child.linenumber)
+                # format string to emphsize todays' todos
+                todos.insert(i_node, child.scheduled.start.strftime("%Y-%m-%d %a") + " 🚀" + child.heading)
+            else:
+                todos.insert(i_node, child.scheduled.start.strftime("%Y-%m-%d %a") + "   " + child.heading)
 
 i_all, key = r.select('ORG-TODO', todos, message="Usage:", \
     key1=('Alt+a', "Agenda for current week or day.\n"), \
         key2=('Alt+c', "Capture a new TODO entry.\n"), \
-            key3=('Ctrl+t', "Mark done TODO entry."))
+            key3=('Alt+d', "Mark done TODO entry."))
 if key == 1:
     i_today, k_today = r.select('AGENDA-TODAY', todos_today, message="<b>   Date</b>" + "             " + "TODO", \
         key1=('Alt+a', "Return agenda for all.\n"), \
             key2=('Alt+c', "Capture a new TODO entry.\n"), \
-                key3=('Ctrl+t', "Mark done TODO entry."))
+                key3=('Alt+d', "Mark done TODO entry."))
     if k_today == 1:
         r.select('ORG-TODO', todos)
     elif k_today == 2:
